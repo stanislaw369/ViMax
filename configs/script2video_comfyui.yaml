@@ -1,0 +1,36 @@
+chat_model:
+  init_args:
+    model: gpt-5
+    model_provider: openai
+    api_key:
+    base_url: https://api.openai.com/v1
+  max_requests_per_minute: null
+  max_requests_per_day: null
+
+image_generator:
+  class_path: tools.ImageGeneratorComfyUIFlux2
+  init_args:
+    base_url: http://127.0.0.1:8188
+    model: flux-2-klein-base-4b.safetensors
+    width: 576
+    height: 1024
+    steps: 20
+    cfg: 4.0
+  max_requests_per_minute: null
+  max_requests_per_day: null
+
+video_generator:
+  class_path: tools.VideoGeneratorComfyUIWan22
+  init_args:
+    base_url: http://127.0.0.1:8188
+    model: wan2.2_ti2v_5B_fp16.safetensors
+    width: 576
+    height: 1024
+    length: 121
+    fps: 24
+    steps: 20
+    cfg: 5.0
+  max_requests_per_minute: null
+  max_requests_per_day: null
+
+working_dir: .working_dir/script2video_comfyui

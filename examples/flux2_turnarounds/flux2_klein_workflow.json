@@ -1,0 +1,97 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "flux-2-klein-4b.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen_3_4b.safetensors",
+      "type": "flux2"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": ["2", 0]
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "A serious adult female character standing inside a miniature suburban living room at night. She holds a smartphone loosely in one hand and looks toward a dark hallway, as if she has just heard something unsettling. Her posture is still and restrained, her expression tense and concerned.\n\nSERIOUS STYLIZED 3D MINIATURE DRAMA aesthetic. The character has elegant simplified 3D facial geometry, moderately enlarged expressive eyes, a small natural nose, restrained lips, sculpted dark brown hair made from clean defined hair shapes, simplified hands and realistic adult proportions. She looks mature and serious, never cute or childlike.\n\nShe wears a simple dark burgundy blouse, charcoal trousers and plain shoes. Clothing has clean shapes and subtle fabric texture without complicated patterns or jewelry.\n\nThe living room is designed as a high-end physical miniature film set: miniature sofa, small coffee table, lamp, framed pictures, narrow hallway and tiny household props. Architecture is believable and realistic but clearly constructed at miniature scale. Slight handcrafted imperfections and model-scale materials remain visible.\n\nMoody cinematic lighting, dim warm practical lamp, cool blue nighttime light from a window, deep soft shadows, shallow depth of field, subtle miniature photography look, adult psychological microdrama, domestic tension, quiet unease.\n\nHigh-end stylized 3D animation combined with miniature-set realism. Serious, sophisticated and cinematic.\n\nNot photorealistic humans. Not cute. Not cheerful. Not Pixar-like. Not anime. Not a children's cartoon. No exaggerated eyes or oversized heads.",
+      "clip": ["2", 0]
+    }
+  },
+  "6": {
+    "class_type": "EmptyFlux2LatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "7": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "8": {
+    "class_type": "Flux2Scheduler",
+    "inputs": {
+      "steps": 20,
+      "width": 1024,
+      "height": 1024
+    }
+  },
+  "9": {
+    "class_type": "CFGGuider",
+    "inputs": {
+      "cfg": 5,
+      "model": ["1", 0],
+      "positive": ["5", 0],
+      "negative": ["4", 0]
+    }
+  },
+  "10": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 84729103567291
+    }
+  },
+  "11": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": ["10", 0],
+      "guider": ["9", 0],
+      "sampler": ["7", 0],
+      "sigmas": ["8", 0],
+      "latent_image": ["6", 0]
+    }
+  },
+  "12": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["11", 0],
+      "vae": ["3", 0]
+    }
+  },
+  "13": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": ["12", 0],
+      "filename_prefix": "Flux2-Klein-ToyMicrodrama"
+    }
+  }
+}
